@@ -1,0 +1,23 @@
+<video id="webcam" autoplay playsinline width="300" height="200"></video>
+<button onclick="takeSnapshot()">Take Snap</button>
+<canvas id="canvas" width="300" height="200" style="display:none;"></canvas>
+<div id="result"></div>
+
+<script>
+  const video = document.getElementById('webcam');
+  
+  // Start webcam stream
+  navigator.mediaDevices.getUserMedia({ video: true })
+    .then(stream => { video.srcObject = stream; })
+    .catch(err => { console.error("Camera error: ", err); });
+
+  function takeSnapshot() {
+    const canvas = document.getElementById('canvas');
+    const context = canvas.getContext('2d');
+    context.drawImage(video, 0, 0, canvas.width, canvas.height);
+    
+    // Get image data as base64 URL
+    const dataURL = canvas.toDataURL('image/png');
+    document.getElementById('result').innerHTML = `<img src="${dataURL}"/>`;
+  }
+</script>
